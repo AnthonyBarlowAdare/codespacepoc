@@ -1,0 +1,78 @@
+
+# ============================================================
+# Engine Dev Environment — Shell Configuration
+# ============================================================
+
+# Go
+export GOPATH="$HOME/go"
+export GOBIN="$GOPATH/bin"
+export PATH="$GOBIN:$PATH"
+
+# LocalStack defaults
+export AWS_ENDPOINT_URL="http://localhost:4566"
+export AWS_DEFAULT_REGION="eu-west-1"
+export AWS_ACCESS_KEY_ID="test"
+export AWS_SECRET_ACCESS_KEY="test"
+
+# Aliases: Docker Compose
+alias dc="docker compose"
+alias dcu="docker compose up -d"
+alias dcd="docker compose down"
+alias dcl="docker compose logs -f"
+alias dcr="docker compose restart"
+alias dps="docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"
+
+# Aliases: Go
+alias gt="go test ./... -v"
+alias gtc="go test ./... -v -cover"
+alias gtd="go test ./internal/domain/... -v -cover"
+alias gta="go test ./internal/application/... -v -cover"
+alias gti="go test ./internal/infrastructure/... -v"
+alias lint="golangci-lint run"
+
+# Aliases: Frontend
+alias nr="npm run"
+alias nrd="npm run dev"
+alias nrt="npm run test"
+alias nrb="npm run build"
+alias nrl="npm run lint"
+
+# Aliases: Git / GitHub
+alias gs="git status"
+alias gl="git log --oneline -20"
+alias gp="git pull origin"
+alias gco="git checkout"
+alias gcb="git checkout -b"
+alias gpr="gh pr create"
+alias gprl="gh pr list"
+alias giss="gh issue list"
+
+# Aliases: PostgreSQL
+alias pglocal="psql -h localhost -p 5432 -U postgres"
+
+# Aliases: LocalStack
+alias lss="localstack status"
+alias lsstart="localstack start -d"
+alias lsstop="localstack stop"
+alias awsl="awslocal"
+
+# Aliases: AWS (real)
+alias awswho="aws sts get-caller-identity"
+
+# Quick navigation
+alias be="cd backend"
+alias fe="cd frontend"
+
+# Print welcome message on first open
+echo ""
+echo "🚀 Engine Dev Environment Ready"
+echo "────────────────────────────────────────"
+echo "  Frontend:    cd frontend && npm run dev"
+echo "  Backend:     cd backend && go run cmd/api/main.go"
+echo "  Database:    docker compose up -d db"
+echo "  LocalStack:  localstack start -d"
+echo "  Tests:       gt (Go) | nrt (React) | npm run test:e2e"
+echo "  Lint:        lint (Go) | nrl (React)"
+echo "  GitHub:      gh issue list | gh pr list"
+echo "────────────────────────────────────────"
+echo ""

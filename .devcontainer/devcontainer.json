@@ -1,0 +1,163 @@
+{
+  "name": "Engine Dev Environment",
+
+  // Custom Dockerfile for system-level deps (Playwright, psql, etc.)
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+
+  // Dev Container Features — modular tool installation
+  "features": {
+    // Docker-in-Docker (for docker compose, LocalStack, etc.)
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "moby": false,
+      "dockerDashComposeVersion": "v2"
+    },
+    // Go
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "1.22"
+    },
+    // Node.js (React frontend + tooling)
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    // AWS CLI v2
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    // LocalStack CLI + awslocal wrapper
+    "ghcr.io/localstack/devcontainer-feature/localstack-cli:1": {
+      "awslocal": true
+    },
+    // Git (latest)
+    "ghcr.io/devcontainers/features/git:1": {},
+    // GitHub CLI
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    // Common utilities
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": false
+    }
+  },
+
+  // VS Code configuration
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // Editor
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 2,
+        "editor.rulers": [120],
+
+        // Go
+        "go.useLanguageServer": true,
+        "go.lintTool": "golangci-lint",
+        "go.lintFlags": ["--fast"],
+        "go.testFlags": ["-v", "-count=1"],
+        "[go]": {
+          "editor.defaultFormatter": "golang.go",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          },
+          "editor.tabSize": 4
+        },
+
+        // TypeScript / React
+        "[typescriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+
+        // Docker
+        "docker.showStartPage": false,
+
+        // Files
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.exclude": {
+          "**/node_modules": true,
+          "**/.git": true,
+          "**/dist": true,
+          "**/bin": true
+        },
+
+        // Terminal
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+
+      "extensions": [
+        // Core
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "editorconfig.editorconfig",
+
+        // Go
+        "golang.go",
+
+        // Docker
+        "ms-azuretools.vscode-docker",
+
+        // AWS
+        "amazonwebservices.aws-toolkit-vscode",
+
+        // Git / GitHub
+        "eamodio.gitlens",
+        "github.vscode-pull-request-github",
+
+        // Database (PostgreSQL)
+        "ckolkman.vscode-postgres",
+
+        // Testing
+        "ms-playwright.playwright",
+
+        // React / TypeScript
+        "bradlc.vscode-tailwindcss",
+        "dsznajder.es7-react-js-snippets",
+
+        // DX
+        "streetsidesoftware.code-spell-checker",
+        "gruntfuggly.todo-tree",
+        "usernamehw.errorlens"
+      ]
+    }
+  },
+
+  // Ports to forward automatically
+  "forwardPorts": [
+    3000,   // React dev server (Vite)
+    8080,   // Go backend API
+    5432,   // PostgreSQL (Aurora-compatible locally)
+    4566,   // LocalStack gateway
+    9222,   // Chrome remote debugging (Playwright)
+    9229    // Node.js debug port
+  ],
+  "portsAttributes": {
+    "3000": { "label": "Frontend", "onAutoForward": "notify" },
+    "8080": { "label": "Backend API", "onAutoForward": "notify" },
+    "5432": { "label": "PostgreSQL", "onAutoForward": "silent" },
+    "4566": { "label": "LocalStack", "onAutoForward": "silent" },
+    "9222": { "label": "Chrome Debug", "onAutoForward": "silent" },
+    "9229": { "label": "Node Debug", "onAutoForward": "silent" }
+  },
+
+  // Lifecycle commands
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
+
+  // Run as non-root user
+  "remoteUser": "vscode",
+
+  // Environment variables
+  "remoteEnv": {
+    "GOPATH": "/home/vscode/go",
+    "GOBIN": "/home/vscode/go/bin",
+    "PATH": "/home/vscode/go/bin:${containerEnv:PATH}",
+    // LocalStack defaults
+    "LOCALSTACK_HOST": "localhost",
+    "AWS_ENDPOINT_URL": "http://localhost:4566",
+    "AWS_DEFAULT_REGION": "eu-west-1",
+    "AWS_ACCESS_KEY_ID": "test",
+    "AWS_SECRET_ACCESS_KEY": "test"
+  }
+}
