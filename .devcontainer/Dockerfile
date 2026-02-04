@@ -18,6 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip \
     jq \
     httpie \
+    # Python (for LocalStack CLI)
+    python3-pip \
     # Git
     git \
     git-lfs \
@@ -55,5 +57,14 @@ COPY .bashrc.append /tmp/.bashrc.append
 RUN cat /tmp/.bashrc.append >> /home/vscode/.bashrc \
     && chown vscode:vscode /home/vscode/.bashrc \
     || true
+
+# ============================================================
+# LocalStack CLI + awslocal wrapper
+# Installed via pip instead of devcontainer feature
+# (the ghcr.io/localstack feature has auth/availability issues)
+# ============================================================
+RUN pip3 install --no-cache-dir localstack awscli-local[ver2] \
+    && localstack --version \
+    && echo "✅ LocalStack CLI installed"
 
 USER vscode

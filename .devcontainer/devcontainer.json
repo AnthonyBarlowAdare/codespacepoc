@@ -23,10 +23,7 @@
     },
     // AWS CLI v2
     "ghcr.io/devcontainers/features/aws-cli:1": {},
-    // LocalStack CLI + awslocal wrapper
-    "ghcr.io/localstack/devcontainer-feature/localstack-cli:1": {
-      "awslocal": true
-    },
+
     // Git (latest)
     "ghcr.io/devcontainers/features/git:1": {},
     // GitHub CLI
