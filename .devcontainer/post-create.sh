@@ -55,14 +55,14 @@ fi
 if [ -f "frontend/package.json" ] && grep -q "playwright" frontend/package.json 2>/dev/null; then
     echo "🎭 Installing Playwright browsers..."
     cd frontend
-    npx playwright install chromium
-    npx playwright install-deps chromium
+    npx --yes playwright install chromium
+    npx --yes playwright install-deps chromium
     cd ..
     echo "✅ Playwright ready"
 else
     echo "🎭 Installing Playwright (standalone)..."
-    npx playwright install chromium 2>/dev/null || true
-    npx playwright install-deps chromium 2>/dev/null || true
+    npx --yes playwright install chromium 2>/dev/null || true
+    npx --yes playwright install-deps chromium 2>/dev/null || true
 fi
 
 # --------------------------------------------------
