@@ -60,10 +60,11 @@ RUN cat /tmp/.bashrc.append >> /home/vscode/.bashrc \
 
 # ============================================================
 # LocalStack CLI + awslocal wrapper
-# Installed via pip instead of devcontainer feature
-# (the ghcr.io/localstack feature has auth/availability issues)
+# We install localstack-core (the CLI) directly, skipping the
+# broken localstack meta-package which has a dependency on
+# localstack-ext with broken metadata.
 # ============================================================
-RUN pip3 install --no-cache-dir localstack awscli-local[ver2] \
+RUN pip3 install --no-cache-dir localstack-core awscli-local[ver2] \
     && localstack --version \
     && echo "✅ LocalStack CLI installed"
 
